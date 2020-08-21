@@ -1,0 +1,84 @@
+12/08/2020 17:05:42	This log contains information about the import schema operation into project 'MyEats.Database' on computer 'RAVEN' by user 'ocanica'.
+12/08/2020 17:05:42	Import of database schema has started.
+12/08/2020 17:05:54	Gathering database credentials
+12/08/2020 17:05:54	Gathering database options
+12/08/2020 17:05:54	Gathering users
+12/08/2020 17:05:54	Gathering roles
+12/08/2020 17:05:54	Gathering application roles
+12/08/2020 17:05:54	Gathering role memberships
+12/08/2020 17:05:54	Gathering filegroups
+12/08/2020 17:05:54	Gathering full-text catalogs
+12/08/2020 17:05:54	Gathering assemblies
+12/08/2020 17:05:54	Gathering certificates
+12/08/2020 17:05:55	Gathering asymmetric keys
+12/08/2020 17:05:55	Gathering symmetric keys
+12/08/2020 17:05:55	Gathering encrypted symmetric keys
+12/08/2020 17:05:55	Gathering schemas
+12/08/2020 17:05:55	Gathering XML schema collections
+12/08/2020 17:05:55	Gathering user-defined data types
+12/08/2020 17:05:55	Gathering user-defined types
+12/08/2020 17:05:55	Gathering table types
+12/08/2020 17:05:55	Gathering unique keys for table types
+12/08/2020 17:05:55	Gathering primary keys for table types
+12/08/2020 17:05:55	Gathering indexes for table types
+12/08/2020 17:05:55	Gathering check constraints for table types
+12/08/2020 17:05:55	Gathering default constraints for table types
+12/08/2020 17:05:55	Gathering partition functions
+12/08/2020 17:05:55	Gathering partition schemes
+12/08/2020 17:07:10	Gathering functions
+12/08/2020 17:07:19	Gathering encrypted functions
+12/08/2020 17:07:28	Gathering aggregates
+12/08/2020 17:07:34	Gathering procedures
+12/08/2020 17:07:44	Gathering encrypted procedures
+12/08/2020 17:07:44	Gathering tables
+12/08/2020 17:07:54	Gathering primary keys
+12/08/2020 17:07:54	Gathering unique constraints
+12/08/2020 17:07:54	Gathering foreign keys
+12/08/2020 17:07:55	Gathering default constraints
+12/08/2020 17:07:55	Gathering check constraints
+12/08/2020 17:08:02	Gathering views
+12/08/2020 17:08:02	Gathering encrypted views
+12/08/2020 17:08:02	Gathering indexes
+12/08/2020 17:08:02	Gathering statistics
+12/08/2020 17:08:02	Gathering full-text index stoplists
+12/08/2020 17:08:02	Gathering search property lists
+12/08/2020 17:08:02	Gathering search properties
+12/08/2020 17:08:02	Gathering full-text indexes
+12/08/2020 17:08:02	Gathering column store indexes
+12/08/2020 17:08:02	Gathering spatial indexes
+12/08/2020 17:08:02	Gathering XML indexes
+12/08/2020 17:08:02	Gathering Selective XML indexes
+12/08/2020 17:08:03	Gathering encrypted triggers
+12/08/2020 17:08:03	Gathering triggers
+12/08/2020 17:08:03	Gathering encrypted and clr ddl triggers
+12/08/2020 17:08:03	Gathering ddl triggers
+12/08/2020 17:08:03	Gathering synonyms
+12/08/2020 17:08:11	Gathering defaults
+12/08/2020 17:08:11	Gathering data constraint uddt bindings
+12/08/2020 17:08:18	Gathering rules
+12/08/2020 17:08:18	Gathering data constraint uddt bindings
+12/08/2020 17:08:18	Gathering message types
+12/08/2020 17:08:18	Gathering queues
+12/08/2020 17:08:18	Gathering contracts
+12/08/2020 17:08:19	Gathering services
+12/08/2020 17:08:19	Gathering event notifications
+12/08/2020 17:08:19	Gathering remote service bindings
+12/08/2020 17:08:19	Gathering broker priorities
+12/08/2020 17:08:19	Gathering signatures
+12/08/2020 17:08:19	Gathering data compression options
+12/08/2020 17:08:19	Gathering sequence types
+12/08/2020 17:08:19	Gathering security policies
+12/08/2020 17:08:19	Gather column encryption keys
+12/08/2020 17:08:19	Gathering column master keys
+12/08/2020 17:08:19	Gathering external data sources
+12/08/2020 17:08:19	Gathering external file formats
+12/08/2020 17:08:19	Gathering external tables
+12/08/2020 17:08:19	Gathering extended properties
+12/08/2020 17:08:21	Gathering credentials
+12/08/2020 17:08:21	Gathering logins
+12/08/2020 17:08:21	Gathering server audits
+12/08/2020 17:08:21	Scanning project for duplicate elements
+12/08/2020 17:08:21	Finished duplicate element processing
+12/08/2020 17:08:22	Finished importing database.
+12/08/2020 17:08:22	A summary of the import was saved to the following location: C:\Users\ocani\Google Drive\Code\projects\csharp\MyEats\src\MyEats.Database\Import Schema Logs\MyEats.Database_20200812040542.log
+12/08/2020 17:08:22	Click Finish to continue...
