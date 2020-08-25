@@ -38,3 +38,5 @@ msbuild.wrn
 
 # Other
 data-mssql/
+appsettings.json
+appsettings.Development.json
