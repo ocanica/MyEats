@@ -2,9 +2,10 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 # Copy csproj and restore as distinct layers
 COPY ["src/MyEats.Api/MyEats.Api.csproj", "src/MyEats.Api/"]
-COPY ["src/MyEats.RepositoryLibrary/MyEats.RepositoryLibrary.csproj", "src/MyEats.RepositoryLibrary/"]
-COPY ["src/MyEats.Database/MyEats.Database.csproj", "src/MyEats.Database/"]
-COPY ["src/MyEats.ServiceLibrary/MyEats.ServiceLibrary.csproj", "src/MyEats.ServiceLibrary/"]
+COPY ["src/MyEats.Business/MyEats.Business.csproj", "src/MyEats.Business/"]
+COPY ["src/MyEats.Commons/MyEats.Commons.csproj", "src/MyEats.Commons/"]
+COPY ["src/MyEats.Domain/MyEats.Domain.csproj", "src/MyEats.Domain/"]
+
 RUN dotnet restore "src/MyEats.Api/MyEats.Api.csproj"
 COPY . .
 WORKDIR "/src/src/MyEats.Api"
