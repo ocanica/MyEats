@@ -15,7 +15,7 @@ using System.Text;
 using MyEats.Business.Services;
 using System.Collections.Generic;
 using System;
-using MyEats.Business.Services.Customer;
+using MyEats.Business.Services.User;
 
 namespace MyEats.Api
 {
@@ -91,7 +91,7 @@ namespace MyEats.Api
 
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

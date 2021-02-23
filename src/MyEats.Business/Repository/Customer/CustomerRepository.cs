@@ -5,7 +5,7 @@ using MyEats.Domain.Entities;
 
 namespace MyEats.Business.Repository
 {
-    public class CustomerRepository : RepositoryBase<CustomerEntity>, ICustomerRepository
+    public class CustomerRepository : RepositoryBase<UserEntity>, ICustomerRepository
     {
         public CustomerRepository(DataContext context)
             : base(context)

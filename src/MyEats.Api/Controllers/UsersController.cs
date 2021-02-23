@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyEats.Business.Models;
 using MyEats.Business.Repository;
-using MyEats.Business.Services.Customer;
+using MyEats.Business.Services.User;
 using MyEats.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
@@ -14,15 +14,15 @@ namespace MyEats.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [SwaggerTag("Customers controller")]
-    public class CustomersController : Controller
+    [SwaggerTag("Users controller")]
+    public class UsersController : Controller
     {
-        private readonly ILogger<CustomersController> _logger;
-        private readonly ICustomerService _service;
+        private readonly ILogger<UsersController> _logger;
+        private readonly IUserService _service;
 
-        public CustomersController(
-            ILogger<CustomersController> logger,
-            ICustomerService service
+        public UsersController(
+            ILogger<UsersController> logger,
+            IUserService service
             )
         {
             _logger = logger;
@@ -34,30 +34,30 @@ namespace MyEats.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [SwaggerResponse(200, "List of customer details", typeof(IEnumerable<CustomerEntity>))]
-        [SwaggerResponse(404, description: "Unable to retrieve list of customer records")]
-        public async Task<IActionResult> GetAllCustomers()
+        [SwaggerResponse(200, "List of user details", typeof(IEnumerable<UserEntity>))]
+        [SwaggerResponse(404, description: "Unable to retrieve list of user records")]
+        public async Task<IActionResult> GetAllUsers()
         {
-            _logger.LogInformation($"Request received {nameof(CustomersController)} at {nameof(GetAllCustomers)} endpoint");
+            _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(GetAllUsers)} endpoint");
 
-            var result = await _service.GetAllCustomers();
+            var result = await _service.GetAllUsers();
 
             return Ok(result);
         }
 
         [Authorize]
-        [HttpGet("{customerId}")]
-        [SwaggerResponse(200, "Retrieved customer", typeof(CustomerEntity))]
+        [HttpGet("{userId}")]
+        [SwaggerResponse(200, "Retrieved users", typeof(UserEntity))]
         [SwaggerResponse(400, description: "Invalid identifier")]
-        [SwaggerResponse(404, description: "Unable to retrieve customer record")]
-        public async Task<IActionResult> GetCustomerById(Guid customerId)
+        [SwaggerResponse(404, description: "Unable to retrieve user record")]
+        public async Task<IActionResult> GetUserById(Guid userId)
         {
-            _logger.LogInformation($"Request received {nameof(CustomersController)} at {nameof(GetCustomerById)} endpoint");
+            _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(GetUserById)} endpoint");
 
-            if (_service.GetCustomerById(customerId) == null)
+            if (_service.GetUserById(userId) == null)
                 return NotFound("Customer identfier not found.");
 
-            var result = await _service.GetCustomerById(customerId);
+            var result = await _service.GetUserById(userId);
 
             return Ok(result);
         }

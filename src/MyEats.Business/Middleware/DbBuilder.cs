@@ -58,7 +58,7 @@ namespace MyEats.Business.Middleware
                 Console.WriteLine("Seeding data...");
                 context.Customers.AddRange
                 (
-                    new CustomerEntity
+                    new UserEntity
                     {
                         CustomerId = Guid.NewGuid(),
                         FirstName = "Dacey",
@@ -72,7 +72,7 @@ namespace MyEats.Business.Middleware
                         Postcode = "E11 3NB",
                         DateRegistered = DateTime.Now
                     },
-                    new CustomerEntity
+                    new UserEntity
                     {
                         CustomerId = Guid.NewGuid(),
                         FirstName = "Margarette",
@@ -86,7 +86,7 @@ namespace MyEats.Business.Middleware
                         Postcode = "E15 6QY",
                         DateRegistered = DateTime.Now
                     },
-                    new CustomerEntity
+                    new UserEntity
                     {
                         CustomerId = Guid.NewGuid(),
                         FirstName = "Ronna",

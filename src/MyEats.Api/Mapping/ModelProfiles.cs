@@ -9,7 +9,7 @@ namespace MyEats.Api.Mapping
     {
         public ModelProfiles()
         {
-            CreateMap<CustomerEntity, CustomerModel>();
+            CreateMap<UserEntity, UserModel>();
             CreateMap<AuthenticationResponse, AuthenticationModel>();
         }
     }

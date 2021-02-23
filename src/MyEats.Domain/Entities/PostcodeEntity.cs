@@ -8,7 +8,9 @@ namespace MyEats.Domain.Entities
 {
     public class PostcodeEntity
     {
-        public int Id { get; set; }
+#nullable enable
+        [Key]
+        public int PostcodeId { get; set; }
 
         [Required]
         [MaxLength(10)]
@@ -17,6 +19,8 @@ namespace MyEats.Domain.Entities
 
         [Required]
         [MaxLength(255)]
+        [Column(TypeName = "varchar(255)")]
         public string Town { get; set; }
+#nullable disable
     }
 }

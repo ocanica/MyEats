@@ -8,15 +8,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyEats.Business.Services.Customer
+namespace MyEats.Business.Services.User
 {
-    public class CustomerService : ICustomerService
+    public class UserService : IUserService
     {
-        private readonly ILogger<CustomerService> _logger;
+        private readonly ILogger<UserService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CustomerService(ILogger<CustomerService> logger, 
+        public UserService(ILogger<UserService> logger, 
             IMapper mapper,
             IUnitOfWork unitOfWork)
         {
@@ -25,24 +25,24 @@ namespace MyEats.Business.Services.Customer
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<CustomerModel>> GetAllCustomers()
+        public async Task<IEnumerable<UserModel>> GetAllUsers()
         {
-            _logger.LogDebug($"{nameof(CustomerService)} end {nameof(GetAllCustomers)}");
+            _logger.LogDebug($"{nameof(UserService)} end {nameof(GetAllUsers)}");
             
             var customers = await _unitOfWork.Customers.GetAllAsync();
 
-            var result = _mapper.Map<IEnumerable<CustomerModel>>(customers);
+            var result = _mapper.Map<IEnumerable<UserModel>>(customers);
 
             return result;
         }
 
-        public async Task<CustomerModel> GetCustomerById(Guid id)
+        public async Task<UserModel> GetUserById(Guid id)
         {
-            _logger.LogDebug($"{nameof(CustomerService)} end {nameof(GetCustomerById)}");
+            _logger.LogDebug($"{nameof(UserService)} end {nameof(GetUserById)}");
 
             var customer = await _unitOfWork.Customers.GetAsync(id);
 
-            var result = _mapper.Map<CustomerModel>(customer);
+            var result = _mapper.Map<UserModel>(customer);
 
             return result;
         }

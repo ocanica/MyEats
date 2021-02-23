@@ -11,7 +11,7 @@ namespace MyEats.WebClient.Pages
     {
         private readonly IApiClient _apiClient;
         private readonly ILogger<IndexModel> _logger;
-        public IEnumerable<CustomerEntity> Customers { get; set; }
+        public IEnumerable<UserEntity> Customers { get; set; }
 
         public IndexModel(IApiClient apiClient, ILogger<IndexModel> logger)
         {

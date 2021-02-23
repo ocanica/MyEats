@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MyEats.Business.Models
 {
-    public class CustomerModel
+    public class UserModel
     {
         public Guid CustomerId { get; set; }
 

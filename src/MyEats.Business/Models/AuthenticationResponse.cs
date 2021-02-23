@@ -11,12 +11,12 @@ namespace MyEats.Business.Models
         public string Email { get; set; }
         public string Token { get; set; }
 
-        public AuthenticationResponse(CustomerEntity customer, string token)
+        public AuthenticationResponse(UserEntity user, string token)
         {
-            Id = customer.CustomerId;
-            FirstName = customer.FirstName;
-            LastName = customer.LastName;
-            Email = customer.Email;
+            Id = user.UserId;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            Email = user.Email;
             Token = token;
         }
     }

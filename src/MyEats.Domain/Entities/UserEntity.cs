@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyEats.Domain.Entities
 {
-    public class CustomerEntity
+    public class UserEntity
     {
 #nullable enable
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid CustomerId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -45,14 +45,13 @@ namespace MyEats.Domain.Entities
         public string Town { get; set; }
 
         [Required]
-        [MaxLength(100)]
-        [Column(TypeName = "varchar(100)")]
-        public string City { get; set; }
-
-        [Required]
         [MaxLength(15)]
         [Column(TypeName = "varchar(15)")]
         public string Postcode { get; set; }
+
+        [MaxLength(100)]
+        [Column(TypeName = "varchar(100)")]
+        public string City { get; set; }
 
         [Required]
         public DateTime DateRegistered { get; set; }
