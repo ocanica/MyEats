@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using MyEats.Business.Helper;
 using MyEats.Business.Services;
 using MyEats.Commons.Constants;
 using MyEats.Domain;
@@ -41,7 +42,7 @@ namespace MyEats.Business.Middleware
                 {
                     context.Postcodes.Add
                         (
-                            new Postcode { PostcodePrefix = postcode.Key, Town = postcode.Value }
+                            new PostcodeEntity { PostcodePrefix = postcode.Key, Town = postcode.Value }
                         );
                 }
 
@@ -57,7 +58,7 @@ namespace MyEats.Business.Middleware
                 Console.WriteLine("Seeding data...");
                 context.Customers.AddRange
                 (
-                    new Customer
+                    new CustomerEntity
                     {
                         CustomerId = Guid.NewGuid(),
                         FirstName = "Dacey",
@@ -71,7 +72,7 @@ namespace MyEats.Business.Middleware
                         Postcode = "E11 3NB",
                         DateRegistered = DateTime.Now
                     },
-                    new Customer
+                    new CustomerEntity
                     {
                         CustomerId = Guid.NewGuid(),
                         FirstName = "Margarette",
@@ -85,7 +86,7 @@ namespace MyEats.Business.Middleware
                         Postcode = "E15 6QY",
                         DateRegistered = DateTime.Now
                     },
-                    new Customer
+                    new CustomerEntity
                     {
                         CustomerId = Guid.NewGuid(),
                         FirstName = "Ronna",

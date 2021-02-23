@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using MyEats.Database.Entities;
+using MyEats.Domain.Entities;
 using MyEats.WebClient.Contracts;
 
 namespace MyEats.WebClient.Pages
@@ -11,7 +11,7 @@ namespace MyEats.WebClient.Pages
     {
         private readonly IApiClient _apiClient;
         private readonly ILogger<IndexModel> _logger;
-        public IEnumerable<Customer> Customers { get; set; }
+        public IEnumerable<CustomerEntity> Customers { get; set; }
 
         public IndexModel(IApiClient apiClient, ILogger<IndexModel> logger)
         {

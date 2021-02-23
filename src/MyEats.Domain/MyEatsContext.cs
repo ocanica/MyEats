@@ -5,8 +5,8 @@ namespace MyEats.Domain
 {
     public class DataContext : DbContext
     {
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Postcode> Postcodes { get; set; }
+        public DbSet<CustomerEntity> Customers { get; set; }
+        public DbSet<PostcodeEntity> Postcodes { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)

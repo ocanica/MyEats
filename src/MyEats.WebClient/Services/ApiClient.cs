@@ -1,4 +1,4 @@
-﻿using MyEats.Database.Entities;
+﻿using MyEats.Domain.Entities;
 using MyEats.WebClient.Contracts;
 using System.Collections.Generic;
 using System.Net;
@@ -19,7 +19,7 @@ namespace MyEats.WebClient.Services
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<Customer>> GetAllCustomers()
+        public async Task<IEnumerable<CustomerEntity>> GetAllCustomers()
         {
             var response = await _httpClient.GetAsync($"api/customers");
 
@@ -29,7 +29,7 @@ namespace MyEats.WebClient.Services
             response.EnsureSuccessStatusCode();
             var customers = await response.Content.ReadAsStringAsync();
 
-            var test = JsonSerializer.Deserialize<IEnumerable<Customer>>(customers);
+            var test = JsonSerializer.Deserialize<IEnumerable<CustomerEntity>>(customers);
 
             return test;
         }

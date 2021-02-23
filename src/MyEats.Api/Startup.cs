@@ -9,12 +9,13 @@ using Microsoft.OpenApi.Models;
 using MyEats.Business.Middleware;
 using MyEats.Domain;
 using MyEats.Business.Repository;
-using MyEats.Business.Repository.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using MyEats.Business.Services.Contracts;
 using MyEats.Business.Services;
+using System.Collections.Generic;
+using System;
+using MyEats.Business.Services.Customer;
 
 namespace MyEats.Api
 {
@@ -30,31 +31,67 @@ namespace MyEats.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
+            
+            services.AddAutoMapper(typeof(Startup));
+
+
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        // Clock skew compensates for server time drift
+                        ClockSkew = TimeSpan.FromMinutes(5),
+                        // Specify the key used to sign the token
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
+                        RequireSignedTokens = true,
+                        RequireExpirationTime = true,
                         ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        // Ensure the token audience matches the audience value (default true)
+                        ValidateAudience = true,
                         ValidAudience = Configuration["Jwt:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                        // Ensure the token was issued by a trusted authorisation server (default true)
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidateIssuerSigningKey = true
                     };
                 });
 
             services.AddControllers();
 
+
             services.AddSwaggerGen(options =>
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyEats API", Version = "v1" })
-            );
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyEats API", Version = "v1" });
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please insert the JWT with 'Bearer' followed by your token into field below",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+            });
 
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<ICustomerService, CustomerService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -64,7 +101,7 @@ namespace MyEats.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.DbSeeder();
+            //app.DbSeeder();
 
             //app.UseHttpsRedirection();
 
@@ -72,7 +109,7 @@ namespace MyEats.Api
 
             app.UseSwaggerUI(options =>
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyEats API v1")
-            );
+            ) ;
 
             app.UseRouting();
 
@@ -82,7 +119,8 @@ namespace MyEats.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", context => {
+                endpoints.MapGet("/", context =>
+                {
                     context.Response.Redirect("/swagger/");
                     return Task.CompletedTask;
                 });

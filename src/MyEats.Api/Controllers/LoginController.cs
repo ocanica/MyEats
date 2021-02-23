@@ -1,16 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using MyEats.Business.Models;
-using MyEats.Business.Repository.Contracts;
-using MyEats.Business.Services.Contracts;
-using MyEats.Domain.Entities;
+using MyEats.Business.Services;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
 
 namespace MyEats.Api.Controllers
 {
