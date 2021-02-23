@@ -30,12 +30,10 @@ namespace MyEats.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
-            
+            services.AddEntityFrameworkNpgsql().AddDbContext<MyEatsDataContext>(opt =>
+            opt.UseNpgsql(Configuration.GetConnectionString("LocalConnection")));
+
             services.AddAutoMapper(typeof(Startup));
-
-
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -101,7 +99,7 @@ namespace MyEats.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.DbSeeder();
+            app.DbSeeder();
 
             //app.UseHttpsRedirection();
 

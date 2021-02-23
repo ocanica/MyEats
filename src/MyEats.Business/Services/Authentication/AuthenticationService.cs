@@ -26,7 +26,7 @@ namespace MyEats.Business.Services
         }
         public AuthenticationModel Authenticate(AuthenticateRequest model)
         {
-            var user = _unitOfWork.Customers.Find(u => u.Email == model.Email && u.Password == model.Password).FirstOrDefault();
+            var user = _unitOfWork.Users.Find(u => u.Email == model.Email && u.Password == model.Password).FirstOrDefault();
             
             if (user == null) return null;
 

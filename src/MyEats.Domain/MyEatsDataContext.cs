@@ -3,7 +3,7 @@ using MyEats.Domain.Entities;
 
 namespace MyEats.Domain
 {
-    public class DataContext : DbContext
+    public class MyEatsDataContext : DbContext
     {
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<RestaurantEntity> Restaurants { get; set; }
@@ -11,7 +11,7 @@ namespace MyEats.Domain
         public DbSet<PostcodeEntity> Postcodes { get; set; }
         public DbSet<MenuItemEntity> MenuItems { get; set; }
 
-        public DataContext(DbContextOptions<DataContext> options)
+        public MyEatsDataContext(DbContextOptions<MyEatsDataContext> options)
             : base(options)
         {
         }

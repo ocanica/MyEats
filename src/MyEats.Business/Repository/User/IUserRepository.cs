@@ -3,7 +3,7 @@ using MyEats.Domain.Entities;
 
 namespace MyEats.Business.Repository
 {
-    public interface ICustomerRepository : IBaseRepository<UserEntity>
+    public interface IUserRepository : IBaseRepository<UserEntity>
     {
     }
 }

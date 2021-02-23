@@ -5,7 +5,7 @@ namespace MyEats.Business.Repository
 {
     public interface IUnitOfWork : IDisposable
     {
-        ICustomerRepository Customers { get; }
+        IUserRepository Users { get; }
 
         Task Save();
     }

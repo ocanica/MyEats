@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using MyEats.Business.Helper;
-using MyEats.Business.Services;
 using MyEats.Commons.Constants;
 using MyEats.Domain;
 using MyEats.Domain.Entities;
@@ -18,17 +16,17 @@ namespace MyEats.Business.Middleware
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                SeedData(serviceScope.ServiceProvider.GetService<DataContext>());               
+                SeedData(serviceScope.ServiceProvider.GetService<MyEatsDataContext>());               
             }
 
             return app;
         }
 
-        public static void SeedData(DataContext context)
+        public static void SeedData(MyEatsDataContext context)
         {
             Console.WriteLine("Applying Migrations...");
 
-            context.Database.Migrate();
+            context.Database.EnsureCreated();
 
             if (context.Postcodes.Any())
             {
@@ -49,18 +47,18 @@ namespace MyEats.Business.Middleware
                 context.SaveChanges();
             }
 
-            if (context.Customers.Any())
+            if (context.Users.Any())
             {
                 Console.WriteLine("Data already exists - seeding not necessary...");
             }
             else
             {
                 Console.WriteLine("Seeding data...");
-                context.Customers.AddRange
+                context.Users.AddRange
                 (
                     new UserEntity
                     {
-                        CustomerId = Guid.NewGuid(),
+                        UserId = Guid.NewGuid(),
                         FirstName = "Dacey",
                         LastName = "Anstis",
                         Email = "danstis0@prnewswire.com",
@@ -74,7 +72,7 @@ namespace MyEats.Business.Middleware
                     },
                     new UserEntity
                     {
-                        CustomerId = Guid.NewGuid(),
+                        UserId = Guid.NewGuid(),
                         FirstName = "Margarette",
                         LastName = "Greenhall",
                         Email = "mgreenhall0@cloudflare.com",
@@ -88,7 +86,7 @@ namespace MyEats.Business.Middleware
                     },
                     new UserEntity
                     {
-                        CustomerId = Guid.NewGuid(),
+                        UserId = Guid.NewGuid(),
                         FirstName = "Ronna",
                         LastName = "Houseman",
                         Email = "rhouseman1@glados.com",

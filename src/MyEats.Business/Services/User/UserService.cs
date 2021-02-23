@@ -29,7 +29,7 @@ namespace MyEats.Business.Services.User
         {
             _logger.LogDebug($"{nameof(UserService)} end {nameof(GetAllUsers)}");
             
-            var customers = await _unitOfWork.Customers.GetAllAsync();
+            var customers = await _unitOfWork.Users.GetAllAsync();
 
             var result = _mapper.Map<IEnumerable<UserModel>>(customers);
 
@@ -40,7 +40,7 @@ namespace MyEats.Business.Services.User
         {
             _logger.LogDebug($"{nameof(UserService)} end {nameof(GetUserById)}");
 
-            var customer = await _unitOfWork.Customers.GetAsync(id);
+            var customer = await _unitOfWork.Users.GetAsync(id);
 
             var result = _mapper.Map<UserModel>(customer);
 
