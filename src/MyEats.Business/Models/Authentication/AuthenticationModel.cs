@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyEats.Business.Models
+namespace MyEats.Business.Models.Authentication
 {
     public class AuthenticationModel
     {

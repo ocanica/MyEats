@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MyEats.Business.Models;
+using MyEats.Business.Models.Authentication;
 using MyEats.Business.Repository;
 using MyEats.Domain.Entities;
 using System;
@@ -26,7 +26,7 @@ namespace MyEats.Business.Services
         }
         public AuthenticationModel Authenticate(AuthenticateRequest model)
         {
-            var user = _unitOfWork.Customers.Find(u => u.Email == model.Email && u.Password == model.Password).FirstOrDefault();
+            var user = _unitOfWork.Users.Find(u => u.Email == model.Email && u.Password == model.Password).FirstOrDefault();
             
             if (user == null) return null;
 
@@ -39,14 +39,14 @@ namespace MyEats.Business.Services
             return result;
         }
 
-        private string generateJSONWebToken(CustomerEntity customer)
+        private string generateJSONWebToken(UserEntity user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, customer.CustomerId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

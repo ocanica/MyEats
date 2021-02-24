@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using MyEats.Business.Models;
+using MyEats.Business.Models.User;
+using MyEats.Business.Models.Authentication;
 using MyEats.Domain.Entities;
 using System.Collections.Generic;
 
@@ -9,8 +10,10 @@ namespace MyEats.Api.Mapping
     {
         public ModelProfiles()
         {
-            CreateMap<CustomerEntity, CustomerModel>();
+            CreateMap<UserEntity, UserModel>()
+                .ForMember(dest => dest.Postcode, opt => opt.MapFrom(src => src.Postcode));
             CreateMap<AuthenticationResponse, AuthenticationModel>();
         }
+
     }
 }

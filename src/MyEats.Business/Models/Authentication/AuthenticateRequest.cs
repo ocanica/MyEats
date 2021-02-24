@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace MyEats.Business.Models
+namespace MyEats.Business.Models.Authentication
 {
     public class AuthenticateRequest
     {

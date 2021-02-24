@@ -15,7 +15,8 @@ using System.Text;
 using MyEats.Business.Services;
 using System.Collections.Generic;
 using System;
-using MyEats.Business.Services.Customer;
+using MyEats.Business.Services.User;
+using MyEats.Business.Services.Postcode;
 
 namespace MyEats.Api
 {
@@ -30,12 +31,10 @@ namespace MyEats.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
-            
+            services.AddDbContext<MyEatsDataContext>(opt =>
+            opt.UseNpgsql(Configuration.GetConnectionString("LocalConnection")));
+
             services.AddAutoMapper(typeof(Startup));
-
-
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -91,7 +90,8 @@ namespace MyEats.Api
 
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPostcodeService, PostcodeService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -101,7 +101,7 @@ namespace MyEats.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.DbSeeder();
+            app.DbSeeder();
 
             //app.UseHttpsRedirection();
 

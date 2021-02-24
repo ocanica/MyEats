@@ -19,7 +19,7 @@ namespace MyEats.WebClient.Services
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<CustomerEntity>> GetAllCustomers()
+        public async Task<IEnumerable<UserEntity>> GetAllCustomers()
         {
             var response = await _httpClient.GetAsync($"api/customers");
 
@@ -29,7 +29,7 @@ namespace MyEats.WebClient.Services
             response.EnsureSuccessStatusCode();
             var customers = await response.Content.ReadAsStringAsync();
 
-            var test = JsonSerializer.Deserialize<IEnumerable<CustomerEntity>>(customers);
+            var test = JsonSerializer.Deserialize<IEnumerable<UserEntity>>(customers);
 
             return test;
         }

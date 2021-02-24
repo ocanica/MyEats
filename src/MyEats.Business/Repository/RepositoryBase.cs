@@ -12,9 +12,9 @@ namespace MyEats.Business.Repository
     public class RepositoryBase<T> : IBaseRepository<T>
         where T : class
     {
-        protected readonly DataContext context;
+        protected readonly MyEatsDataContext context;
 
-        public RepositoryBase(DataContext context)
+        public RepositoryBase(MyEatsDataContext context)
         {
             this.context = context
                 ?? throw new ArgumentNullException(nameof(context));

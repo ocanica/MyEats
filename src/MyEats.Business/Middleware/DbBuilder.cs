@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using MyEats.Business.Helper;
-using MyEats.Business.Services;
 using MyEats.Commons.Constants;
 using MyEats.Domain;
 using MyEats.Domain.Entities;
@@ -18,23 +16,19 @@ namespace MyEats.Business.Middleware
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                SeedData(serviceScope.ServiceProvider.GetService<DataContext>());               
+                SeedData(serviceScope.ServiceProvider.GetService<MyEatsDataContext>());               
             }
 
             return app;
         }
 
-        public static void SeedData(DataContext context)
+        public static void SeedData(MyEatsDataContext context)
         {
             Console.WriteLine("Applying Migrations...");
 
-            context.Database.Migrate();
+            context.Database.EnsureCreated();
 
-            if (context.Postcodes.Any())
-            {
-                Console.WriteLine("Data already exists - seeding not necessary...");
-            } 
-            else
+            if (!context.Postcodes.Any())
             {
                 Console.WriteLine("Seeding postcodes...");
 
@@ -47,63 +41,67 @@ namespace MyEats.Business.Middleware
                 }
 
                 context.SaveChanges();
-            }
+            };
 
-            if (context.Customers.Any())
-            {
-                Console.WriteLine("Data already exists - seeding not necessary...");
-            }
-            else
+            Console.WriteLine("Data already exists - seeding not necessary...");
+
+            if (!context.Users.Any())
             {
                 Console.WriteLine("Seeding data...");
-                context.Customers.AddRange
+
+                context.Users.AddRange
                 (
-                    new CustomerEntity
+                    new UserEntity
                     {
-                        CustomerId = Guid.NewGuid(),
+                        UserId = Guid.NewGuid(),
                         FirstName = "Dacey",
                         LastName = "Anstis",
                         Email = "danstis0@prnewswire.com",
                         Password = "f6jBS8ez0",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "389 Browning Hill",
-                        Town = "Leytonstone",
                         City = "London",
                         Postcode = "E11 3NB",
+                        PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("E11"))
+                            .FirstOrDefault().PostcodeId,
                         DateRegistered = DateTime.Now
                     },
-                    new CustomerEntity
+                    new UserEntity
                     {
-                        CustomerId = Guid.NewGuid(),
+                        UserId = Guid.NewGuid(),
                         FirstName = "Margarette",
                         LastName = "Greenhall",
                         Email = "mgreenhall0@cloudflare.com",
                         Password = "cLJko5",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "318 Killdeer Parkway",
-                        Town = "Straford",
                         City = "London",
                         Postcode = "E15 6QY",
+                        PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("E15"))
+                            .FirstOrDefault().PostcodeId,
                         DateRegistered = DateTime.Now
                     },
-                    new CustomerEntity
+                    new UserEntity
                     {
-                        CustomerId = Guid.NewGuid(),
+                        UserId = Guid.NewGuid(),
                         FirstName = "Ronna",
                         LastName = "Houseman",
                         Email = "rhouseman1@glados.com",
                         Password = "98Frn6DfE2R6",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "98 Red Cloud Avenue",
-                        Town = "Neasdem",
                         City = "London",
                         Postcode = "NW2 4JX",
+                        PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("NW2"))
+                            .FirstOrDefault().PostcodeId,
                         DateRegistered = DateTime.Now
                     }
                 );
 
                 context.SaveChanges();
             }
+
+            Console.WriteLine("Data already exists - seeding not necessary...");
         }
     }
 }

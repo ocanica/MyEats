@@ -6,15 +6,17 @@ namespace MyEats.Business.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DataContext _context;
-        public ICustomerRepository Customers { get; private set; }
+        private readonly MyEatsDataContext _context;
+        public IUserRepository Users { get; private set; }
+        public IPostcodeRepository Postcodes { get; private set; }
 
-        public UnitOfWork(DataContext context)
+        public UnitOfWork(MyEatsDataContext context)
         {
             _context = context ??
                 throw new ArgumentNullException(nameof(context));
 
-            Customers = new CustomerRepository(context);
+            Users = new UserRepository(context);
+            Postcodes = new PostcodeRepository(context);
         }
 
         public async Task Save()
