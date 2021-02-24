@@ -6,7 +6,6 @@ namespace MyEats.Domain.Entities
 {
     public class UserEntity
     {
-#nullable enable
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid UserId { get; set; }
@@ -40,14 +39,13 @@ namespace MyEats.Domain.Entities
         public string StreetAddress { get; set; }
 
         [Required]
-        [MaxLength(100)]
-        [Column(TypeName = "varchar(150)")]
-        public string Town { get; set; }
-
-        [Required]
         [MaxLength(15)]
         [Column(TypeName = "varchar(15)")]
         public string Postcode { get; set; }
+
+        [ForeignKey("PostcodeEntity")]
+        public int? PostcodeId { get; set; }
+        public PostcodeEntity PostCode { get; set; }
 
         [MaxLength(100)]
         [Column(TypeName = "varchar(100)")]
@@ -55,8 +53,5 @@ namespace MyEats.Domain.Entities
 
         [Required]
         public DateTime DateRegistered { get; set; }
-
-        public int? PostcodeId { get; set; }
-#nullable disable
     }
 }

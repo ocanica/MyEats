@@ -8,6 +8,7 @@ namespace MyEats.Business.Repository
     {
         private readonly MyEatsDataContext _context;
         public IUserRepository Users { get; private set; }
+        public IPostcodeRepository Postcodes { get; private set; }
 
         public UnitOfWork(MyEatsDataContext context)
         {
@@ -15,6 +16,7 @@ namespace MyEats.Business.Repository
                 throw new ArgumentNullException(nameof(context));
 
             Users = new UserRepository(context);
+            Postcodes = new PostcodeRepository(context);
         }
 
         public async Task Save()

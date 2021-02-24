@@ -28,11 +28,7 @@ namespace MyEats.Business.Middleware
 
             context.Database.EnsureCreated();
 
-            if (context.Postcodes.Any())
-            {
-                Console.WriteLine("Data already exists - seeding not necessary...");
-            } 
-            else
+            if (!context.Postcodes.Any())
             {
                 Console.WriteLine("Seeding postcodes...");
 
@@ -45,15 +41,14 @@ namespace MyEats.Business.Middleware
                 }
 
                 context.SaveChanges();
-            }
+            };
 
-            if (context.Users.Any())
-            {
-                Console.WriteLine("Data already exists - seeding not necessary...");
-            }
-            else
+            Console.WriteLine("Data already exists - seeding not necessary...");
+
+            if (!context.Users.Any())
             {
                 Console.WriteLine("Seeding data...");
+
                 context.Users.AddRange
                 (
                     new UserEntity
@@ -65,9 +60,10 @@ namespace MyEats.Business.Middleware
                         Password = "f6jBS8ez0",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "389 Browning Hill",
-                        Town = "Leytonstone",
                         City = "London",
                         Postcode = "E11 3NB",
+                        PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("E11"))
+                            .FirstOrDefault().PostcodeId,
                         DateRegistered = DateTime.Now
                     },
                     new UserEntity
@@ -79,9 +75,10 @@ namespace MyEats.Business.Middleware
                         Password = "cLJko5",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "318 Killdeer Parkway",
-                        Town = "Straford",
                         City = "London",
                         Postcode = "E15 6QY",
+                        PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("E15"))
+                            .FirstOrDefault().PostcodeId,
                         DateRegistered = DateTime.Now
                     },
                     new UserEntity
@@ -93,15 +90,18 @@ namespace MyEats.Business.Middleware
                         Password = "98Frn6DfE2R6",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "98 Red Cloud Avenue",
-                        Town = "Neasdem",
                         City = "London",
                         Postcode = "NW2 4JX",
+                        PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("NW2"))
+                            .FirstOrDefault().PostcodeId,
                         DateRegistered = DateTime.Now
                     }
                 );
 
                 context.SaveChanges();
             }
+
+            Console.WriteLine("Data already exists - seeding not necessary...");
         }
     }
 }

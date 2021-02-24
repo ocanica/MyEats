@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MyEats.Business.Models;
+using MyEats.Business.Models.Authentication;
 using MyEats.Business.Repository;
 using MyEats.Domain.Entities;
 using System;

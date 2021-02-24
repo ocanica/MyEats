@@ -16,6 +16,7 @@ using MyEats.Business.Services;
 using System.Collections.Generic;
 using System;
 using MyEats.Business.Services.User;
+using MyEats.Business.Services.Postcode;
 
 namespace MyEats.Api
 {
@@ -30,7 +31,7 @@ namespace MyEats.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEntityFrameworkNpgsql().AddDbContext<MyEatsDataContext>(opt =>
+            services.AddDbContext<MyEatsDataContext>(opt =>
             opt.UseNpgsql(Configuration.GetConnectionString("LocalConnection")));
 
             services.AddAutoMapper(typeof(Startup));
@@ -90,6 +91,7 @@ namespace MyEats.Api
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPostcodeService, PostcodeService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

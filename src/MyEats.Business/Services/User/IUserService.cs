@@ -1,4 +1,4 @@
-﻿using MyEats.Business.Models;
+﻿using MyEats.Business.Models.User;
 using MyEats.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,5 +11,12 @@ namespace MyEats.Business.Services.User
         Task<IEnumerable<UserModel>> GetAllUsers();
 
         Task<UserModel> GetUserById(Guid id);
+
+        bool UserExists(UserCreateModel user);
+
+        bool UserExistsById(Guid userId);
+
+        Task<UserModel> CreateUser(UserCreateModel user);
+        Task RemoveUserById(Guid userId);
     }
 }

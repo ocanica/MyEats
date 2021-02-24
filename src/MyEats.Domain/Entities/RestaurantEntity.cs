@@ -8,14 +8,17 @@ namespace MyEats.Domain.Entities
 {
     public class RestaurantEntity
     {
-#nullable enable
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid RestaurantId { get; set; }
 
-        public Guid UserId { get; set; }
+        [Required]
+        [MaxLength(150)]
+        [Column(TypeName = "varchar(150)")]
+        public string Name { get; set; }
 
+        [ForeignKey("PostcodeEntity")]
         public int PostcodeId { get; set; }
-#nullable disable
+        public PostcodeEntity Postcode { get; set; }
     }
 }

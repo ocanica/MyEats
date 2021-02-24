@@ -7,6 +7,8 @@ namespace MyEats.Business.Repository
     {
         IUserRepository Users { get; }
 
+        IPostcodeRepository Postcodes { get; }
+
         Task Save();
     }
 }

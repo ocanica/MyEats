@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MyEats.Business.Models;
-using MyEats.Business.Repository;
+using MyEats.Business.Models.User;
 using MyEats.Business.Services.User;
-using MyEats.Domain.Entities;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -34,7 +32,7 @@ namespace MyEats.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [SwaggerResponse(200, "List of user details", typeof(IEnumerable<UserEntity>))]
+        [SwaggerResponse(200, "List of user details", typeof(IEnumerable<UserModel>))]
         [SwaggerResponse(404, description: "Unable to retrieve list of user records")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -47,14 +45,16 @@ namespace MyEats.Api.Controllers
 
         [Authorize]
         [HttpGet("{userId}")]
-        [SwaggerResponse(200, "Retrieved users", typeof(UserEntity))]
+        [SwaggerResponse(200, "Retrieved users", typeof(UserModel))]
         [SwaggerResponse(400, description: "Invalid identifier")]
         [SwaggerResponse(404, description: "Unable to retrieve user record")]
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(GetUserById)} endpoint");
 
-            if (_service.GetUserById(userId) == null)
+            var userExists = _service.UserExistsById(userId);
+
+            if (!userExists)
                 return NotFound("Customer identfier not found.");
 
             var result = await _service.GetUserById(userId);
@@ -62,20 +62,24 @@ namespace MyEats.Api.Controllers
             return Ok(result);
         }
 
-        /*[HttpPost]
-        public async Task<IActionResult> Post([FromBody] CustomerModel customer)
+        [HttpPost]
+        [SwaggerResponse(201, "Created user", typeof(UserCreateModel))]
+        [SwaggerResponse(400, "Something went wrong creating while the user")]
+        public async Task<IActionResult> CreateNewUser(UserCreateModel user)
         {
-            if (customer == null)
-                return BadRequest("Empty customer object");
+            _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(CreateNewUser)} endpoint");
 
-            customer.CustomerId = Guid.NewGuid();
-            await _unitOfWork.Customers.AddAsync(customer);
-            var url = Url.Link("CustomerGet", new { customerId = customer.CustomerId });
+            var userExists = _service.UserExists(user);
 
-            return Created(url, customer);
+            if (userExists)
+                return BadRequest("Email already exists");
+
+            var model = await _service.CreateUser(user);
+
+            return CreatedAtAction(nameof(CreateNewUser), model.UserId);
         }
 
-        [HttpPut("{customerId}")]
+        /*[HttpPut("{customerId}")]
         public async Task<IActionResult> Update(Guid customerId, [FromBody] CustomerModel customer)
         {
             if (customer == null)
@@ -98,20 +102,22 @@ namespace MyEats.Api.Controllers
             await _unitOfWork.Save();
 
             return Ok(existingCustomer);
-        }
+        }*/
 
-        [HttpDelete("{customerId}")]
-        public async Task<IActionResult> Delete(Guid customerId)
+        [Authorize]
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> Delete(Guid userId)
         {
-            var existingCustomer = await _unitOfWork.Customers.GetAsync(customerId);
+            _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(Delete)} endpoint");
 
-            if (existingCustomer == null)
-                return NotFound("Customer not found");
+            var userExists = _service.UserExistsById(userId);
 
-            _unitOfWork.Customers.Remove(existingCustomer);
-            await _unitOfWork.Save();
+            if (!userExists)
+                return NotFound("Customer identfier not found.");
+
+            await _service.RemoveUserById(userId);
 
             return NoContent();
-        }*/
+        }
     }
 }

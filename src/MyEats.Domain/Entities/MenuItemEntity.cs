@@ -8,12 +8,12 @@ namespace MyEats.Domain.Entities
 {
     public class MenuItemEntity
     {
-#nullable enable
         [Key]
         public int MenuItemId { get; set; }
 
-        [Required]
+        [ForeignKey("RestaurantEntity")]
         public Guid RestaurantId { get; set; }
+        public RestaurantEntity Restaurant { get; set; }
 
         [Required]
         [MaxLength(255)]
@@ -32,6 +32,5 @@ namespace MyEats.Domain.Entities
         [Required]
         [Column(TypeName = "boolean")]
         public bool Active { get; set; }
-#nullable disable
     }
 }

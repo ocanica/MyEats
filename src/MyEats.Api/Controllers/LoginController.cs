@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyEats.Business.Models;
+using MyEats.Business.Models.Authentication;
 using MyEats.Business.Services;
 using Swashbuckle.AspNetCore.Annotations;
 

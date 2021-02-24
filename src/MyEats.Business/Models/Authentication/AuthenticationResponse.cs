@@ -1,7 +1,7 @@
 ﻿using MyEats.Domain.Entities;
 using System;
 
-namespace MyEats.Business.Models
+namespace MyEats.Business.Models.Authentication
 {
     public class AuthenticationResponse
     {

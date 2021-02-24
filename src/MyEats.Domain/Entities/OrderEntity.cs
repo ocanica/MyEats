@@ -8,22 +8,22 @@ namespace MyEats.Domain.Entities
 {
     public class OrderEntity
     {
-#nullable enable
         [Key]
         public int OrderId { get; set; }
 
-        [Required]
+        [ForeignKey("UserEntity")]
         public Guid UserId { get; set; }
+        public UserEntity User { get; set; }
 
-        [Required]
+        [ForeignKey("MenuItemEntity")]
         public int MenuItemId { get; set; }
+        public IEnumerable<MenuItemEntity> MenuItem { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(12,2)")]
-        public decimal Price { get; set; }
+        public decimal TotalPrice { get; set; }
 
         [Required]
         public DateTime DateOrdered { get; set; }
-#nullable disable
     }
 }

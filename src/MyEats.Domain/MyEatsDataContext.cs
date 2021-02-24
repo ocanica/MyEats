@@ -10,6 +10,7 @@ namespace MyEats.Domain
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<PostcodeEntity> Postcodes { get; set; }
         public DbSet<MenuItemEntity> MenuItems { get; set; }
+        public DbSet<InOrderEntity> InOrders { get; set; }
 
         public MyEatsDataContext(DbContextOptions<MyEatsDataContext> options)
             : base(options)

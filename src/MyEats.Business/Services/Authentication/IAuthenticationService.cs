@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Features.Authentication;
-using MyEats.Business.Models;
-using MyEats.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
+﻿using MyEats.Business.Models.Authentication;
 
 namespace MyEats.Business.Services
 {
