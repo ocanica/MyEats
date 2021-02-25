@@ -46,16 +46,14 @@ namespace MyEats.Api.Controllers
         [Authorize]
         [HttpGet("{userId}")]
         [SwaggerResponse(200, "Retrieved users", typeof(UserModel))]
-        [SwaggerResponse(400, description: "Invalid identifier")]
+        [SwaggerResponse(400, description: "Something went wrong while retrieving the user")]
         [SwaggerResponse(404, description: "Unable to retrieve user record")]
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(GetUserById)} endpoint");
 
-            var userExists = _service.UserExistsById(userId);
-
-            if (!userExists)
-                return NotFound("Customer identfier not found.");
+            if (!_service.UserExistsById(userId))
+                return NotFound("User identfier not found.");
 
             var result = await _service.GetUserById(userId);
 
@@ -64,59 +62,58 @@ namespace MyEats.Api.Controllers
 
         [HttpPost]
         [SwaggerResponse(201, "Created user", typeof(UserCreateModel))]
-        [SwaggerResponse(400, "Something went wrong creating while the user")]
+        [SwaggerResponse(400, "Something went wrong while creating the user")]
         public async Task<IActionResult> CreateNewUser(UserCreateModel user)
         {
             _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(CreateNewUser)} endpoint");
 
-            var userExists = _service.UserExists(user);
-
-            if (userExists)
+            if (_service.UserExists(user))
                 return BadRequest("Email already exists");
 
             var model = await _service.CreateUser(user);
 
+            if (model == null)
+                return BadRequest("Something went wrong while creating user");
+
+            _logger.LogInformation($"User created at {DateTime.UtcNow.ToLongTimeString()}");
+
             return CreatedAtAction(nameof(CreateNewUser), model.UserId);
         }
 
-        /*[HttpPut("{customerId}")]
-        public async Task<IActionResult> Update(Guid customerId, [FromBody] CustomerModel customer)
+        [Authorize]
+        [HttpPut("{userId}")]
+        [SwaggerResponse(200, "Updated user", typeof(UserUpdateModel))]
+        [SwaggerResponse(400, description: "Something went wrong while updating the user")]
+        [SwaggerResponse(404, description: "Unable to retrieve user record")]
+        public async Task<IActionResult> UpdateUser(Guid userId, UserUpdateModel user)
         {
-            if (customer == null)
-                return BadRequest("Empty customer object");
+            _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(UpdateUser)} endpoint");
 
-            var existingCustomer = await _unitOfWork.Customers.GetAsync(customerId);
+            if (!_service.UserExistsById(userId))
+                return NotFound("User identfier not found.");
 
-            if (existingCustomer == null)
-                return NotFound("Customer not found");
+            var model = await _service.UpdateUser(userId, user);
 
-            existingCustomer.FirstName = customer.FirstName;
-            existingCustomer.LastName = customer.LastName;
-            existingCustomer.Email = customer.Email;
-            existingCustomer.Password = customer.Password;
-            existingCustomer.StreetAddress = customer.StreetAddress;
-            existingCustomer.Town = customer.Town;
-            existingCustomer.City = customer.City;
-            existingCustomer.Postcode = customer.Postcode;
+            if (model == null)
+                return BadRequest("Something went wrong while creating user");
 
-            await _unitOfWork.Save();
+            _logger.LogInformation($"User updated at {DateTime.UtcNow.ToLongTimeString()}");
 
-            return Ok(existingCustomer);
-        }*/
+            return Ok(model);
+        }
 
         [Authorize]
         [HttpDelete("{userId}")]
-        public async Task<IActionResult> Delete(Guid userId)
+        public async Task<IActionResult> DeleteUser(Guid userId)
         {
-            _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(Delete)} endpoint");
+            _logger.LogInformation($"Request received {nameof(UsersController)} at {nameof(DeleteUser)} endpoint");
 
-            var userExists = _service.UserExistsById(userId);
-
-            if (!userExists)
+            if (!_service.UserExistsById(userId))
                 return NotFound("Customer identfier not found.");
 
             await _service.RemoveUserById(userId);
 
+            _logger.LogInformation($"User deleted at {DateTime.UtcNow.ToLongTimeString()}");
             return NoContent();
         }
     }

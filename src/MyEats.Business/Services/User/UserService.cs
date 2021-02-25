@@ -85,7 +85,7 @@ namespace MyEats.Business.Services.User
             {
                 _logger.LogDebug($"{nameof(UserService)} init {nameof(CreateUser)}");
                 
-                var userEntity = new UserEntity()
+                var modelToCreate = new UserEntity()
                 {
                     UserId = Guid.NewGuid(),
                     FirstName = user.FirstName,
@@ -100,10 +100,10 @@ namespace MyEats.Business.Services.User
                     DateRegistered = DateTime.UtcNow
                 };
 
-                await _unitOfWork.Users.AddAsync(userEntity);
+                await _unitOfWork.Users.AddAsync(modelToCreate);
                 await _unitOfWork.Save();
 
-                var result = _mapper.Map<UserModel>(userEntity);
+                var result = _mapper.Map<UserModel>(modelToCreate);
 
                 _logger.LogDebug($"{nameof(UserService)} end {nameof(CreateUser)}");
 
@@ -130,11 +130,41 @@ namespace MyEats.Business.Services.User
             }
             catch (Exception ex)
             {
-
                 _logger.LogError($"Error removing User. Error {ex.InnerException}");
                 throw new Exception(ex.Message);
             }
-            
+        }
+
+        public async Task<UserModel> UpdateUser(Guid userId, UserUpdateModel user)
+        {
+            try
+            {
+                _logger.LogDebug($"{nameof(UserService)} init {nameof(UpdateUser)}");
+
+                var modelToUpdate = _unitOfWork.Users.Find(x => x.UserId == userId).FirstOrDefault();
+
+                modelToUpdate.FirstName = user.FirstName;
+                modelToUpdate.LastName = user.LastName;
+                modelToUpdate.Password = user.Password;
+                modelToUpdate.PhoneNumber = user.PhoneNumber;
+                modelToUpdate.StreetAddress = user.StreetAddress;
+                modelToUpdate.Postcode = user.Postcode;
+                modelToUpdate.PostcodeId = _postcodeService.GetPostcodeId(user.Postcode);
+                modelToUpdate.City = user.City;
+                modelToUpdate.DateUpdated = DateTime.UtcNow;
+
+                await _unitOfWork.Save();
+                var result = _mapper.Map<UserModel>(modelToUpdate);
+
+                _logger.LogDebug($"{nameof(UserService)} end {nameof(UpdateUser)}");
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error while updating User. Error {ex.InnerException}");
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

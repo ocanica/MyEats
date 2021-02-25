@@ -18,5 +18,6 @@ namespace MyEats.Business.Services.User
 
         Task<UserModel> CreateUser(UserCreateModel user);
         Task RemoveUserById(Guid userId);
+        Task<UserModel> UpdateUser(Guid userId, UserUpdateModel user);
     }
 }

@@ -17,13 +17,17 @@ namespace MyEats.Domain.Entities
 
         [Required]
         [MaxLength(255)]
-        [Column(TypeName = "varchar(255)")]
+        [Column(TypeName = "varchar(100)")]
         public string Name { get; set; }
 
         [Required]
         [MaxLength(255)]
         [Column(TypeName = "varchar(255)")]
         public string Description { get; set; }
+
+        [ForeignKey("CategoryEntity")]
+        public int CategoryId { get; set; }
+        public CategoryEntity Category { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(12,2)")]

@@ -17,8 +17,16 @@ namespace MyEats.Domain.Entities
         [Column(TypeName = "varchar(150)")]
         public string Name { get; set; }
 
+        public string StreetAddress { get; set; }
+
+        public string Postcode { get; set; }
+
         [ForeignKey("PostcodeEntity")]
         public int PostcodeId { get; set; }
-        public PostcodeEntity Postcode { get; set; }
+        public PostcodeEntity PostCode { get; set; }
+
+        public IEnumerable<CuisineEntity> Cuisine { get; set; }
+
+        public IEnumerable<PostcodeEntity> DeliverablePostcode { get; set; }
     }
 }

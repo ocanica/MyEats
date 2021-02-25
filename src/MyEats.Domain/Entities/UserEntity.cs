@@ -44,7 +44,7 @@ namespace MyEats.Domain.Entities
         public string Postcode { get; set; }
 
         [ForeignKey("PostcodeEntity")]
-        public int? PostcodeId { get; set; }
+        public int PostcodeId { get; set; }
         public PostcodeEntity PostCode { get; set; }
 
         [MaxLength(100)]
@@ -53,5 +53,7 @@ namespace MyEats.Domain.Entities
 
         [Required]
         public DateTime DateRegistered { get; set; }
+
+        public DateTime? DateUpdated { get; set; }
     }
 }
