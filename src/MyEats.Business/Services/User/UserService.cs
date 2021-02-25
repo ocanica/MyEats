@@ -143,14 +143,15 @@ namespace MyEats.Business.Services.User
 
                 var modelToUpdate = _unitOfWork.Users.Find(x => x.UserId == userId).FirstOrDefault();
 
-                modelToUpdate.FirstName = user.FirstName;
-                modelToUpdate.LastName = user.LastName;
-                modelToUpdate.Password = user.Password;
-                modelToUpdate.PhoneNumber = user.PhoneNumber;
-                modelToUpdate.StreetAddress = user.StreetAddress;
-                modelToUpdate.Postcode = user.Postcode;
-                modelToUpdate.PostcodeId = _postcodeService.GetPostcodeId(user.Postcode);
-                modelToUpdate.City = user.City;
+                modelToUpdate.FirstName = user.FirstName ?? modelToUpdate.FirstName;
+                modelToUpdate.LastName = user.LastName ?? modelToUpdate.LastName;
+                modelToUpdate.Password = user.Password ?? modelToUpdate.Password;
+                modelToUpdate.PhoneNumber = user.PhoneNumber ?? modelToUpdate.PhoneNumber;
+                modelToUpdate.StreetAddress = user.StreetAddress ?? modelToUpdate.StreetAddress;
+                modelToUpdate.Postcode = user.Postcode ?? modelToUpdate.Postcode;
+                modelToUpdate.PostcodeId = _postcodeService.GetPostcodeId(modelToUpdate.Postcode);
+                modelToUpdate.Town = _postcodeService.GetTown(modelToUpdate.Postcode);
+                modelToUpdate.City = user.City ?? modelToUpdate.City;
                 modelToUpdate.DateUpdated = DateTime.UtcNow;
 
                 await _unitOfWork.Save();

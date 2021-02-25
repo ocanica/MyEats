@@ -38,5 +38,6 @@ msbuild.wrn
 
 # Other
 data-mssql/
+migrations/
 appsettings.json
 appsettings.Development.json

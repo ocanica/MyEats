@@ -19,13 +19,20 @@ namespace MyEats.Business.Services.Postcode
             _unitOfWork = unitOfWork;
         }
 
+        public string GetTown(string postcode)
+        {
+            var outcode = PostcodeHelper.ExtractOutcode(postcode);
+            var result = _unitOfWork.Postcodes.Find(x => x.PostcodePrefix.Contains(outcode)).FirstOrDefault().Town;
+
+            return result;
+        }
+
         public int GetPostcodeId(string postcode)
         {
             var outcode = PostcodeHelper.ExtractOutcode(postcode);
             var result = _unitOfWork.Postcodes.Find(x => x.PostcodePrefix.Contains(outcode)).FirstOrDefault().PostcodeId;
 
             return result;
-
         }
 
         public bool PostcodeExists(string postcode)

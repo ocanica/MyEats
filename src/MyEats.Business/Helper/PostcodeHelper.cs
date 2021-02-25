@@ -10,9 +10,9 @@ namespace MyEats.Business.Helper
         public static string ExtractOutcode(string postcode)
         {
             var input = postcode.Replace(" ", "").ToUpper();
-            var pattern = @"^(([A-Z][A-Z]{0,1})([0-9][A-Z0-9]{0,1})) {0,}(([0-9])([A-Z]{2}))$";
+            var pattern = @"^(((([A-Z][A-Z]{0,1})[0-9][A-Z0-9]{0,1}) {0,}[0-9])[A-Z]{2})$";
             var match = Regex.Match(input, pattern);
-            var result = match.Groups[1].Value;
+            var result = match.Groups[3].Value;
 
             return result;
         }

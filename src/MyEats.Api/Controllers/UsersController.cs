@@ -75,7 +75,7 @@ namespace MyEats.Api.Controllers
             if (model == null)
                 return BadRequest("Something went wrong while creating user");
 
-            _logger.LogInformation($"User created at {DateTime.UtcNow.ToLongTimeString()}");
+            _logger.LogInformation($"User {model.UserId} created at {DateTime.UtcNow.ToLongTimeString()}");
 
             return CreatedAtAction(nameof(CreateNewUser), model.UserId);
         }
@@ -97,7 +97,7 @@ namespace MyEats.Api.Controllers
             if (model == null)
                 return BadRequest("Something went wrong while creating user");
 
-            _logger.LogInformation($"User updated at {DateTime.UtcNow.ToLongTimeString()}");
+            _logger.LogInformation($"User {model.UserId} updated at {DateTime.UtcNow.ToLongTimeString()}");
 
             return Ok(model);
         }
@@ -113,7 +113,7 @@ namespace MyEats.Api.Controllers
 
             await _service.RemoveUserById(userId);
 
-            _logger.LogInformation($"User deleted at {DateTime.UtcNow.ToLongTimeString()}");
+            _logger.LogInformation($"User {userId} deleted at {DateTime.UtcNow.ToLongTimeString()}");
             return NoContent();
         }
     }

@@ -11,6 +11,8 @@ namespace MyEats.Domain
         public DbSet<PostcodeEntity> Postcodes { get; set; }
         public DbSet<MenuItemEntity> MenuItems { get; set; }
         public DbSet<InOrderEntity> InOrders { get; set; }
+        public DbSet<CuisineEntity> Cuisines { get; set; }
+        public DbSet<CategoryEntity> Categories { get; set; }
 
         public MyEatsDataContext(DbContextOptions<MyEatsDataContext> options)
             : base(options)

@@ -19,6 +19,41 @@ namespace MyEats.Domain.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            modelBuilder.Entity("MyEats.Domain.Entities.CategoryEntity", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("text");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.CuisineEntity", b =>
+                {
+                    b.Property<int>("CuisineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CuisineName")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("RestaurantEntityRestaurantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CuisineId");
+
+                    b.HasIndex("RestaurantEntityRestaurantId");
+
+                    b.ToTable("Cuisines");
+                });
+
             modelBuilder.Entity("MyEats.Domain.Entities.InOrderEntity", b =>
                 {
                     b.Property<int>("InOrderId")
@@ -57,6 +92,9 @@ namespace MyEats.Domain.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -65,7 +103,7 @@ namespace MyEats.Domain.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int?>("OrderEntityOrderId")
                         .HasColumnType("integer");
@@ -77,6 +115,8 @@ namespace MyEats.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("MenuItemId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("OrderEntityOrderId");
 
@@ -123,12 +163,17 @@ namespace MyEats.Domain.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
+                    b.Property<Guid?>("RestaurantEntityRestaurantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Town")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("PostcodeId");
+
+                    b.HasIndex("RestaurantEntityRestaurantId");
 
                     b.ToTable("Postcodes");
                 });
@@ -144,8 +189,14 @@ namespace MyEats.Domain.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
+                    b.Property<string>("Postcode")
+                        .HasColumnType("text");
+
                     b.Property<int>("PostcodeId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("StreetAddress")
+                        .HasColumnType("text");
 
                     b.HasKey("RestaurantId");
 
@@ -165,6 +216,9 @@ namespace MyEats.Domain.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("DateRegistered")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
@@ -197,11 +251,15 @@ namespace MyEats.Domain.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
-                    b.Property<int?>("PostcodeId")
+                    b.Property<int>("PostcodeId")
                         .HasColumnType("integer");
 
                     b.Property<string>("StreetAddress")
                         .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Town")
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
@@ -210,6 +268,13 @@ namespace MyEats.Domain.Migrations
                     b.HasIndex("PostcodeId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.CuisineEntity", b =>
+                {
+                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", null)
+                        .WithMany("Cuisine")
+                        .HasForeignKey("RestaurantEntityRestaurantId");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.InOrderEntity", b =>
@@ -233,6 +298,12 @@ namespace MyEats.Domain.Migrations
 
             modelBuilder.Entity("MyEats.Domain.Entities.MenuItemEntity", b =>
                 {
+                    b.HasOne("MyEats.Domain.Entities.CategoryEntity", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MyEats.Domain.Entities.OrderEntity", null)
                         .WithMany("MenuItem")
                         .HasForeignKey("OrderEntityOrderId");
@@ -242,6 +313,8 @@ namespace MyEats.Domain.Migrations
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Restaurant");
                 });
@@ -257,22 +330,31 @@ namespace MyEats.Domain.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MyEats.Domain.Entities.PostcodeEntity", b =>
+                {
+                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", null)
+                        .WithMany("DeliverablePostcode")
+                        .HasForeignKey("RestaurantEntityRestaurantId");
+                });
+
             modelBuilder.Entity("MyEats.Domain.Entities.RestaurantEntity", b =>
                 {
-                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", "Postcode")
+                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", "PostCode")
                         .WithMany()
                         .HasForeignKey("PostcodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Postcode");
+                    b.Navigation("PostCode");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.UserEntity", b =>
                 {
                     b.HasOne("MyEats.Domain.Entities.PostcodeEntity", "PostCode")
                         .WithMany()
-                        .HasForeignKey("PostcodeId");
+                        .HasForeignKey("PostcodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("PostCode");
                 });
@@ -280,6 +362,13 @@ namespace MyEats.Domain.Migrations
             modelBuilder.Entity("MyEats.Domain.Entities.OrderEntity", b =>
                 {
                     b.Navigation("MenuItem");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.RestaurantEntity", b =>
+                {
+                    b.Navigation("Cuisine");
+
+                    b.Navigation("DeliverablePostcode");
                 });
 #pragma warning restore 612, 618
         }

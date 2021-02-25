@@ -38,6 +38,10 @@ namespace MyEats.Domain.Entities
         [Column(TypeName = "varchar(150)")]
         public string StreetAddress { get; set; }
 
+        [MaxLength(150)]
+        [Column(TypeName = "varchar(150)")]
+        public string? Town { get; set; }
+
         [Required]
         [MaxLength(15)]
         [Column(TypeName = "varchar(15)")]

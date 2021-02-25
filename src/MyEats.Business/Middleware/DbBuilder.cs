@@ -43,11 +43,11 @@ namespace MyEats.Business.Middleware
                 context.SaveChanges();
             };
 
-            Console.WriteLine("Data already exists - seeding not necessary...");
+            Console.WriteLine("Postcode data already exists.");
 
             if (!context.Users.Any())
             {
-                Console.WriteLine("Seeding data...");
+                Console.WriteLine("Seeding user data...");
 
                 context.Users.AddRange
                 (
@@ -60,6 +60,8 @@ namespace MyEats.Business.Middleware
                         Password = "f6jBS8ez0",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "389 Browning Hill",
+                        Town = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("E11"))
+                            .FirstOrDefault().Town,
                         City = "London",
                         Postcode = "E11 3NB",
                         PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("E11"))
@@ -75,6 +77,8 @@ namespace MyEats.Business.Middleware
                         Password = "cLJko5",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "318 Killdeer Parkway",
+                        Town = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("E15"))
+                            .FirstOrDefault().Town,
                         City = "London",
                         Postcode = "E15 6QY",
                         PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("E15"))
@@ -90,18 +94,20 @@ namespace MyEats.Business.Middleware
                         Password = "98Frn6DfE2R6",
                         PhoneNumber = UKPhoneNumberGenerator.Generate(),
                         StreetAddress = "98 Red Cloud Avenue",
+                        Town = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("NW2"))
+                            .FirstOrDefault().Town,
                         City = "London",
                         Postcode = "NW2 4JX",
                         PostcodeId = context.Postcodes.Where(x => x.PostcodePrefix.StartsWith("NW2"))
                             .FirstOrDefault().PostcodeId,
                         DateRegistered = DateTime.Now
                     }
-                );
+                );;
 
                 context.SaveChanges();
             }
 
-            Console.WriteLine("Data already exists - seeding not necessary...");
+            Console.WriteLine("User data already exists.");
         }
     }
 }

@@ -9,5 +9,7 @@ namespace MyEats.Business.Services.Postcode
         bool PostcodeExists(string postcode);
 
         int GetPostcodeId(string postcode);
+
+        public string GetTown(string postcode);
     }
 }
