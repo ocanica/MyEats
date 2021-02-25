@@ -19,6 +19,21 @@ namespace MyEats.Domain.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            modelBuilder.Entity("CuisineEntityRestaurantEntity", b =>
+                {
+                    b.Property<int>("CuisineId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RestaurantsRestaurantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CuisineId", "RestaurantsRestaurantId");
+
+                    b.HasIndex("RestaurantsRestaurantId");
+
+                    b.ToTable("CuisineEntityRestaurantEntity");
+                });
+
             modelBuilder.Entity("MyEats.Domain.Entities.CategoryEntity", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -41,15 +56,10 @@ namespace MyEats.Domain.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("CuisineName")
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("RestaurantEntityRestaurantId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("CuisineId");
-
-                    b.HasIndex("RestaurantEntityRestaurantId");
 
                     b.ToTable("Cuisines");
                 });
@@ -105,9 +115,6 @@ namespace MyEats.Domain.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int?>("OrderEntityOrderId")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(12,2)");
 
@@ -117,8 +124,6 @@ namespace MyEats.Domain.Migrations
                     b.HasKey("MenuItemId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("OrderEntityOrderId");
 
                     b.HasIndex("RestaurantId");
 
@@ -134,9 +139,6 @@ namespace MyEats.Domain.Migrations
 
                     b.Property<DateTime>("DateOrdered")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("MenuItemId")
-                        .HasColumnType("integer");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(12,2)");
@@ -163,17 +165,12 @@ namespace MyEats.Domain.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<Guid?>("RestaurantEntityRestaurantId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Town")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("PostcodeId");
-
-                    b.HasIndex("RestaurantEntityRestaurantId");
 
                     b.ToTable("Postcodes");
                 });
@@ -184,10 +181,25 @@ namespace MyEats.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int?>("CategoryEntityCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateRegistered")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
 
                     b.Property<string>("Postcode")
                         .HasColumnType("text");
@@ -198,9 +210,12 @@ namespace MyEats.Domain.Migrations
                     b.Property<string>("StreetAddress")
                         .HasColumnType("text");
 
+                    b.Property<string>("Town")
+                        .HasColumnType("text");
+
                     b.HasKey("RestaurantId");
 
-                    b.HasIndex("PostcodeId");
+                    b.HasIndex("CategoryEntityCategoryId");
 
                     b.ToTable("Restaurants");
                 });
@@ -251,6 +266,9 @@ namespace MyEats.Domain.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
+                    b.Property<int?>("PostcodeEntityPostcodeId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PostcodeId")
                         .HasColumnType("integer");
 
@@ -265,16 +283,39 @@ namespace MyEats.Domain.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("PostcodeId");
+                    b.HasIndex("PostcodeEntityPostcodeId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MyEats.Domain.Entities.CuisineEntity", b =>
+            modelBuilder.Entity("PostcodeEntityRestaurantEntity", b =>
                 {
+                    b.Property<int>("DeliverablePostcodePostcodeId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RestaurantsRestaurantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("DeliverablePostcodePostcodeId", "RestaurantsRestaurantId");
+
+                    b.HasIndex("RestaurantsRestaurantId");
+
+                    b.ToTable("PostcodeEntityRestaurantEntity");
+                });
+
+            modelBuilder.Entity("CuisineEntityRestaurantEntity", b =>
+                {
+                    b.HasOne("MyEats.Domain.Entities.CuisineEntity", null)
+                        .WithMany()
+                        .HasForeignKey("CuisineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MyEats.Domain.Entities.RestaurantEntity", null)
-                        .WithMany("Cuisine")
-                        .HasForeignKey("RestaurantEntityRestaurantId");
+                        .WithMany()
+                        .HasForeignKey("RestaurantsRestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.InOrderEntity", b =>
@@ -286,7 +327,7 @@ namespace MyEats.Domain.Migrations
                         .IsRequired();
 
                     b.HasOne("MyEats.Domain.Entities.OrderEntity", "Order")
-                        .WithMany()
+                        .WithMany("InOrders")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -304,10 +345,6 @@ namespace MyEats.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyEats.Domain.Entities.OrderEntity", null)
-                        .WithMany("MenuItem")
-                        .HasForeignKey("OrderEntityOrderId");
-
                     b.HasOne("MyEats.Domain.Entities.RestaurantEntity", "Restaurant")
                         .WithMany()
                         .HasForeignKey("RestaurantId")
@@ -322,7 +359,7 @@ namespace MyEats.Domain.Migrations
             modelBuilder.Entity("MyEats.Domain.Entities.OrderEntity", b =>
                 {
                     b.HasOne("MyEats.Domain.Entities.UserEntity", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -330,45 +367,53 @@ namespace MyEats.Domain.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MyEats.Domain.Entities.PostcodeEntity", b =>
-                {
-                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", null)
-                        .WithMany("DeliverablePostcode")
-                        .HasForeignKey("RestaurantEntityRestaurantId");
-                });
-
             modelBuilder.Entity("MyEats.Domain.Entities.RestaurantEntity", b =>
                 {
-                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", "PostCode")
-                        .WithMany()
-                        .HasForeignKey("PostcodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PostCode");
+                    b.HasOne("MyEats.Domain.Entities.CategoryEntity", null)
+                        .WithMany("Restaurants")
+                        .HasForeignKey("CategoryEntityCategoryId");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.UserEntity", b =>
                 {
-                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", "PostCode")
+                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", null)
+                        .WithMany("Users")
+                        .HasForeignKey("PostcodeEntityPostcodeId");
+                });
+
+            modelBuilder.Entity("PostcodeEntityRestaurantEntity", b =>
+                {
+                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", null)
                         .WithMany()
-                        .HasForeignKey("PostcodeId")
+                        .HasForeignKey("DeliverablePostcodePostcodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PostCode");
+                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", null)
+                        .WithMany()
+                        .HasForeignKey("RestaurantsRestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.CategoryEntity", b =>
+                {
+                    b.Navigation("Restaurants");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.OrderEntity", b =>
                 {
-                    b.Navigation("MenuItem");
+                    b.Navigation("InOrders");
                 });
 
-            modelBuilder.Entity("MyEats.Domain.Entities.RestaurantEntity", b =>
+            modelBuilder.Entity("MyEats.Domain.Entities.PostcodeEntity", b =>
                 {
-                    b.Navigation("Cuisine");
+                    b.Navigation("Users");
+                });
 
-                    b.Navigation("DeliverablePostcode");
+            modelBuilder.Entity("MyEats.Domain.Entities.UserEntity", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

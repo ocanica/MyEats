@@ -15,15 +15,13 @@ namespace MyEats.Domain.Entities
         public Guid UserId { get; set; }
         public UserEntity User { get; set; }
 
-        [ForeignKey("MenuItemEntity")]
-        public int MenuItemId { get; set; }
-        public IEnumerable<MenuItemEntity> MenuItem { get; set; }
-
         [Required]
         [Column(TypeName = "decimal(12,2)")]
         public decimal TotalPrice { get; set; }
 
         [Required]
         public DateTime DateOrdered { get; set; }
+
+        public IEnumerable<InOrderEntity> InOrders { get; set; }
     }
 }

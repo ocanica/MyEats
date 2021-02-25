@@ -20,5 +20,9 @@ namespace MyEats.Domain.Entities
         [MaxLength(255)]
         [Column(TypeName = "varchar(100)")]
         public string Town { get; set; }
+
+        public IEnumerable<RestaurantEntity> Restaurants { get; set; }
+
+        public IEnumerable<UserEntity> Users { get; set; }
     }
 }

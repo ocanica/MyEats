@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -47,9 +49,9 @@ namespace MyEats.Domain.Entities
         [Column(TypeName = "varchar(15)")]
         public string Postcode { get; set; }
 
-        [ForeignKey("PostcodeEntity")]
+        //[ForeignKey("PostcodeEntity")]
         public int PostcodeId { get; set; }
-        public PostcodeEntity PostCode { get; set; }
+        //public PostcodeEntity PostCode { get; set; }
 
         [MaxLength(100)]
         [Column(TypeName = "varchar(100)")]
@@ -59,5 +61,7 @@ namespace MyEats.Domain.Entities
         public DateTime DateRegistered { get; set; }
 
         public DateTime? DateUpdated { get; set; }
+
+        public IEnumerable<OrderEntity> Orders { get; set; }
     }
 }
