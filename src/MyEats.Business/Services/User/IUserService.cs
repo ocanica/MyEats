@@ -1,5 +1,4 @@
 ﻿using MyEats.Business.Models.User;
-using MyEats.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -11,23 +11,18 @@ namespace MyEats.Domain.Entities
         [Key]
         public int MenuItemId { get; set; }
 
-        [ForeignKey("RestaurantEntity")]
         public Guid RestaurantId { get; set; }
         public RestaurantEntity Restaurant { get; set; }
 
         [Required]
-        [MaxLength(255)]
+        [MaxLength(100)]
         [Column(TypeName = "varchar(100)")]
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(255)]
-        [Column(TypeName = "varchar(255)")]
+        [MaxLength(150)]
+        [Column(TypeName = "varchar(150)")]
         public string Description { get; set; }
-
-        [ForeignKey("CategoryEntity")]
-        public int CategoryId { get; set; }
-        public CategoryEntity Category { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(12,2)")]

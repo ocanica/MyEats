@@ -19,21 +19,6 @@ namespace MyEats.Domain.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("CuisineEntityRestaurantEntity", b =>
-                {
-                    b.Property<int>("CuisineId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("RestaurantsRestaurantId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("CuisineId", "RestaurantsRestaurantId");
-
-                    b.HasIndex("RestaurantsRestaurantId");
-
-                    b.ToTable("CuisineEntityRestaurantEntity");
-                });
-
             modelBuilder.Entity("MyEats.Domain.Entities.CategoryEntity", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -41,8 +26,10 @@ namespace MyEats.Domain.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("CategoryName")
-                        .HasColumnType("text");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("CategoryId");
 
@@ -57,11 +44,28 @@ namespace MyEats.Domain.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("CuisineId");
 
                     b.ToTable("Cuisines");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.DeliveryArea", b =>
+                {
+                    b.Property<int>("PostcodeID")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PostcodeID", "RestaurantId");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("DeliveryAreas");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.InOrderEntity", b =>
@@ -92,6 +96,21 @@ namespace MyEats.Domain.Migrations
                     b.ToTable("InOrders");
                 });
 
+            modelBuilder.Entity("MyEats.Domain.Entities.MenuCategory", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MenuItemId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CategoryId", "MenuItemId");
+
+                    b.HasIndex("MenuItemId");
+
+                    b.ToTable("MenuCategories");
+                });
+
             modelBuilder.Entity("MyEats.Domain.Entities.MenuItemEntity", b =>
                 {
                     b.Property<int>("MenuItemId")
@@ -102,17 +121,14 @@ namespace MyEats.Domain.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
+                        .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("Price")
@@ -122,8 +138,6 @@ namespace MyEats.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("MenuItemId");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("RestaurantId");
 
@@ -140,6 +154,12 @@ namespace MyEats.Domain.Migrations
                     b.Property<DateTime>("DateOrdered")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int>("Items")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uuid");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(12,2)");
 
@@ -147,6 +167,8 @@ namespace MyEats.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("RestaurantId");
 
                     b.HasIndex("UserId");
 
@@ -167,12 +189,27 @@ namespace MyEats.Domain.Migrations
 
                     b.Property<string>("Town")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.HasKey("PostcodeId");
 
                     b.ToTable("Postcodes");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.RestaurantCuisine", b =>
+                {
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CuisineId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RestaurantId", "CuisineId");
+
+                    b.HasIndex("CuisineId");
+
+                    b.ToTable("RestaurantCuisines");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.RestaurantEntity", b =>
@@ -181,11 +218,9 @@ namespace MyEats.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("CategoryEntityCategoryId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("City")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("DateRegistered")
                         .HasColumnType("timestamp without time zone");
@@ -193,29 +228,47 @@ namespace MyEats.Domain.Migrations
                     b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Postcode")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
 
                     b.Property<int>("PostcodeId")
                         .HasColumnType("integer");
 
                     b.Property<string>("StreetAddress")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.Property<string>("Town")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.HasKey("RestaurantId");
 
-                    b.HasIndex("CategoryEntityCategoryId");
+                    b.HasIndex("PostcodeId");
 
                     b.ToTable("Restaurants");
                 });
@@ -244,12 +297,12 @@ namespace MyEats.Domain.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -266,9 +319,6 @@ namespace MyEats.Domain.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
-                    b.Property<int?>("PostcodeEntityPostcodeId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("PostcodeId")
                         .HasColumnType("integer");
 
@@ -278,44 +328,34 @@ namespace MyEats.Domain.Migrations
                         .HasColumnType("varchar(150)");
 
                     b.Property<string>("Town")
+                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("PostcodeEntityPostcodeId");
+                    b.HasIndex("PostcodeId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PostcodeEntityRestaurantEntity", b =>
+            modelBuilder.Entity("MyEats.Domain.Entities.DeliveryArea", b =>
                 {
-                    b.Property<int>("DeliverablePostcodePostcodeId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("RestaurantsRestaurantId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("DeliverablePostcodePostcodeId", "RestaurantsRestaurantId");
-
-                    b.HasIndex("RestaurantsRestaurantId");
-
-                    b.ToTable("PostcodeEntityRestaurantEntity");
-                });
-
-            modelBuilder.Entity("CuisineEntityRestaurantEntity", b =>
-                {
-                    b.HasOne("MyEats.Domain.Entities.CuisineEntity", null)
+                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", "Postcode")
                         .WithMany()
-                        .HasForeignKey("CuisineId")
+                        .HasForeignKey("PostcodeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", null)
+                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", "Restaurant")
                         .WithMany()
-                        .HasForeignKey("RestaurantsRestaurantId")
+                        .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Postcode");
+
+                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.InOrderEntity", b =>
@@ -337,11 +377,60 @@ namespace MyEats.Domain.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("MyEats.Domain.Entities.MenuItemEntity", b =>
+            modelBuilder.Entity("MyEats.Domain.Entities.MenuCategory", b =>
                 {
                     b.HasOne("MyEats.Domain.Entities.CategoryEntity", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyEats.Domain.Entities.MenuItemEntity", "MenuItem")
+                        .WithMany()
+                        .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("MenuItem");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.MenuItemEntity", b =>
+                {
+                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.OrderEntity", b =>
+                {
+                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", "Restaurant")
+                        .WithMany("Orders")
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyEats.Domain.Entities.UserEntity", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Restaurant");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.RestaurantCuisine", b =>
+                {
+                    b.HasOne("MyEats.Domain.Entities.CuisineEntity", "Cuisine")
+                        .WithMany()
+                        .HasForeignKey("CuisineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -351,54 +440,31 @@ namespace MyEats.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Cuisine");
 
                     b.Navigation("Restaurant");
                 });
 
-            modelBuilder.Entity("MyEats.Domain.Entities.OrderEntity", b =>
+            modelBuilder.Entity("MyEats.Domain.Entities.RestaurantEntity", b =>
                 {
-                    b.HasOne("MyEats.Domain.Entities.UserEntity", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
+                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", "PostCode")
+                        .WithMany()
+                        .HasForeignKey("PostcodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MyEats.Domain.Entities.RestaurantEntity", b =>
-                {
-                    b.HasOne("MyEats.Domain.Entities.CategoryEntity", null)
-                        .WithMany("Restaurants")
-                        .HasForeignKey("CategoryEntityCategoryId");
+                    b.Navigation("PostCode");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.UserEntity", b =>
                 {
-                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", null)
+                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", "PostCode")
                         .WithMany("Users")
-                        .HasForeignKey("PostcodeEntityPostcodeId");
-                });
-
-            modelBuilder.Entity("PostcodeEntityRestaurantEntity", b =>
-                {
-                    b.HasOne("MyEats.Domain.Entities.PostcodeEntity", null)
-                        .WithMany()
-                        .HasForeignKey("DeliverablePostcodePostcodeId")
+                        .HasForeignKey("PostcodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyEats.Domain.Entities.RestaurantEntity", null)
-                        .WithMany()
-                        .HasForeignKey("RestaurantsRestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MyEats.Domain.Entities.CategoryEntity", b =>
-                {
-                    b.Navigation("Restaurants");
+                    b.Navigation("PostCode");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.OrderEntity", b =>
@@ -409,6 +475,11 @@ namespace MyEats.Domain.Migrations
             modelBuilder.Entity("MyEats.Domain.Entities.PostcodeEntity", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("MyEats.Domain.Entities.RestaurantEntity", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("MyEats.Domain.Entities.UserEntity", b =>

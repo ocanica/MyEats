@@ -11,17 +11,22 @@ namespace MyEats.Domain.Entities
         [Key]
         public int OrderId { get; set; }
 
-        [ForeignKey("UserEntity")]
         public Guid UserId { get; set; }
         public UserEntity User { get; set; }
 
-        [Required]
+        public Guid RestaurantId { get; set; }
+        public RestaurantEntity Restaurant { get; set; }
+
         [Column(TypeName = "decimal(12,2)")]
         public decimal TotalPrice { get; set; }
 
-        [Required]
+        [Column(TypeName = "integer")]
+        public int Items { get; set; }
+
         public DateTime DateOrdered { get; set; }
 
         public IEnumerable<InOrderEntity> InOrders { get; set; }
+
+        
     }
 }

@@ -17,11 +17,9 @@ namespace MyEats.Domain.Entities
         public string PostcodePrefix { get; set; }
 
         [Required]
-        [MaxLength(255)]
-        [Column(TypeName = "varchar(100)")]
+        [MaxLength(150)]
+        [Column(TypeName = "varchar(150)")]
         public string Town { get; set; }
-
-        public IEnumerable<RestaurantEntity> Restaurants { get; set; }
 
         public IEnumerable<UserEntity> Users { get; set; }
     }

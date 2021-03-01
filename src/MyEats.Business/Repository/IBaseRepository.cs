@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace MyEats.Business.Repository
     {
         Task<T> GetAsync(Guid id);
 
+        Task<T> GetAsync(int id);
+
         Task<IEnumerable<T>> GetAllAsync();
 
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
@@ -21,5 +24,7 @@ namespace MyEats.Business.Repository
         void Remove(T entity);
 
         void RemoveRange(IEnumerable<T> entities);
+
+        IQueryable<T> List();
     }
 }

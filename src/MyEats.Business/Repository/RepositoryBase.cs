@@ -13,14 +13,21 @@ namespace MyEats.Business.Repository
         where T : class
     {
         protected readonly MyEatsDataContext context;
+        protected readonly DbSet<T> targetDbSet;
 
         public RepositoryBase(MyEatsDataContext context)
         {
             this.context = context
                 ?? throw new ArgumentNullException(nameof(context));
+            this.targetDbSet = context.Set<T>();
         }
 
         public async Task<T> GetAsync(Guid id)
+        {
+            return await context.Set<T>().FindAsync(id); ;
+        }
+
+        public async Task<T> GetAsync(int id)
         {
             return await context.Set<T>().FindAsync(id); ;
         }
@@ -51,6 +58,11 @@ namespace MyEats.Business.Repository
         public void RemoveRange(IEnumerable<T> entities)
         {
             context.Set<T>().RemoveRange(entities);
+        }
+
+        public IQueryable<T> List()
+        {
+            return targetDbSet;
         }
     }
 }

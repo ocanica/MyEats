@@ -18,10 +18,7 @@ namespace MyEats.Api.Controllers
         private readonly ILogger<UsersController> _logger;
         private readonly IUserService _service;
 
-        public UsersController(
-            ILogger<UsersController> logger,
-            IUserService service
-            )
+        public UsersController(ILogger<UsersController> logger, IUserService service)
         {
             _logger = logger;
             _service = service;

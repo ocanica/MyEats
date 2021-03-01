@@ -16,7 +16,10 @@ using MyEats.Business.Services;
 using System.Collections.Generic;
 using System;
 using MyEats.Business.Services.User;
+using MyEats.Business.Services.Order;
 using MyEats.Business.Services.Postcode;
+using MyEats.Business.Services.InOrder;
+using MyEats.Business.Services.MenuItem;
 
 namespace MyEats.Api
 {
@@ -92,6 +95,9 @@ namespace MyEats.Api
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IPostcodeService, PostcodeService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IInOrderService, InOrderService>();
+            services.AddTransient<IMenuItemService, MenuItemService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

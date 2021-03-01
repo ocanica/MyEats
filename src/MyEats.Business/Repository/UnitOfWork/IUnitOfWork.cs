@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyEats.Business.Repository.InOrder;
+using System;
 using System.Threading.Tasks;
 
 namespace MyEats.Business.Repository
@@ -8,6 +9,12 @@ namespace MyEats.Business.Repository
         IUserRepository Users { get; }
 
         IPostcodeRepository Postcodes { get; }
+
+        IOrderRepository Orders { get; }
+
+        IMenuItemRepository MenuItems { get; }
+
+        IInOrderRepository InOrders { get; }
 
         Task Save();
     }

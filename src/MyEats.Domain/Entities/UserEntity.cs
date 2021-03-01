@@ -14,10 +14,12 @@ namespace MyEats.Domain.Entities
 
         [Required]
         [MaxLength(50)]
+        [Column(TypeName = "varchar(50)")]
         public string FirstName { get; set; }
 
         [Required]
         [MaxLength(50)]
+        [Column(TypeName = "varchar(50)")]
         public string LastName { get; set; }
 
         [Required]
@@ -40,22 +42,23 @@ namespace MyEats.Domain.Entities
         [Column(TypeName = "varchar(150)")]
         public string StreetAddress { get; set; }
 
+        [Required]
         [MaxLength(150)]
         [Column(TypeName = "varchar(150)")]
-        public string? Town { get; set; }
+        public string Town { get; set; }
+
+        [MaxLength(100)]
+        [Column(TypeName = "varchar(100)")]
+        public string City { get; set; }
 
         [Required]
         [MaxLength(15)]
         [Column(TypeName = "varchar(15)")]
         public string Postcode { get; set; }
 
-        //[ForeignKey("PostcodeEntity")]
+        [ForeignKey("PostcodeEntity")]
         public int PostcodeId { get; set; }
-        //public PostcodeEntity PostCode { get; set; }
-
-        [MaxLength(100)]
-        [Column(TypeName = "varchar(100)")]
-        public string City { get; set; }
+        public PostcodeEntity PostCode { get; set; }
 
         [Required]
         public DateTime DateRegistered { get; set; }

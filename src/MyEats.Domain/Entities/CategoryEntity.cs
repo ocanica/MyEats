@@ -12,8 +12,9 @@ namespace MyEats.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
 
-        public string CategoryName { get; set; }
-
-        public IEnumerable<RestaurantEntity> Restaurants { get; set; }
+        [Required]
+        [MaxLength(50)]
+        [Column(TypeName = "varchar(50)")]
+        public string Name { get; set; }
     }
 }

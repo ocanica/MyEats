@@ -37,11 +37,11 @@ namespace MyEats.Business.Services.User
             
             var users = await _unitOfWork.Users.GetAllAsync();
 
-            var result = _mapper.Map<IEnumerable<UserModel>>(users);
+            var results = _mapper.Map<IEnumerable<UserModel>>(users);
 
             _logger.LogDebug($"{nameof(UserService)} end {nameof(GetAllUsers)}");
 
-            return result;
+            return results;
         }
 
         public async Task<UserModel> GetUserById(Guid id)
@@ -150,12 +150,12 @@ namespace MyEats.Business.Services.User
                 modelToUpdate.StreetAddress = user.StreetAddress ?? modelToUpdate.StreetAddress;
                 modelToUpdate.Postcode = user.Postcode ?? modelToUpdate.Postcode;
                 modelToUpdate.PostcodeId = _postcodeService.GetPostcodeId(modelToUpdate.Postcode);
-                modelToUpdate.Town = _postcodeService.GetTown(modelToUpdate.Postcode);
                 modelToUpdate.City = user.City ?? modelToUpdate.City;
                 modelToUpdate.DateUpdated = DateTime.UtcNow;
 
                 await _unitOfWork.Save();
                 var result = _mapper.Map<UserModel>(modelToUpdate);
+                result.Town = _postcodeService.GetTown(modelToUpdate.Postcode);
 
                 _logger.LogDebug($"{nameof(UserService)} end {nameof(UpdateUser)}");
 
